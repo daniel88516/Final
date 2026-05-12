@@ -1,7 +1,7 @@
 //建立容器
 cd C:\Users\danie\Desktop\Linuxwork\BusyDocker
 wsl sudo ./build.sh --run
-54068588
+(然後輸入密碼)
 
 //以root身份進入wsl
 docker exec -it busydocker_inst bash
