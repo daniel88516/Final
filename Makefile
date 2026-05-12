@@ -6,7 +6,7 @@ SRCS = main.c ls.c cp.c wc.c
 OBJS = $(SRCS:.c=.o)
 LINKS = ls cp wc
 
-.PHONY: all clean install
+.PHONY: all clean install test_all
 
 all: $(TARGET)
 
@@ -21,3 +21,8 @@ clean:
 
 install: $(TARGET)
 	$(foreach link,$(LINKS),ln -sf $(TARGET) $(link) &&) true
+
+test_all: all
+	bash testcases/test_bbtop.sh
+	bash testcases/test_bbfscheck.sh
+	bash testcases/test_bbnetmon.sh
