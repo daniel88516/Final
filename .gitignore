@@ -1,0 +1,23 @@
+# Compiled executables
+mybox
+cp
+ls
+wc
+
+# Object files
+*.o
+
+# Debug files
+*.dSYM/
+*.su
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
