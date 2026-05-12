@@ -1,0 +1,9 @@
+//建立容器
+cd C:\Users\danie\Desktop\Linuxwork\BusyDocker
+wsl sudo ./build.sh --run
+54068588
+
+//以root身份進入wsl
+docker exec -it busydocker_inst bash
+cd /workspace/HW3
+make check
