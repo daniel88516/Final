@@ -120,9 +120,9 @@ int scan_dir(const char *path, int max_depth, int *file_count, unsigned long lon
         snprintf(fullpath, sizeof(fullpath), "%s/%s", path, ent->d_name);
 
         /* 跳過虛擬檔案系統 */
-        if (strcmp(fullpath, "/proc") == 0 ||
-            strcmp(fullpath, "/sys")  == 0 ||
-            strcmp(fullpath, "/dev")  == 0) continue;
+        if (strcmp(fullpath, "/proc") == 0 || strcmp(fullpath, "//proc") == 0 ||
+            strcmp(fullpath, "/sys")  == 0 || strcmp(fullpath, "//sys")  == 0 ||
+            strcmp(fullpath, "/dev")  == 0 || strcmp(fullpath, "//dev")  == 0) continue;
 
         if (lstat(fullpath, &st) != 0) continue;
 
@@ -198,6 +198,7 @@ void print_table_row(const char **fields, int nfields)
 /* 檢查檔案系統使用率是否超過門檻，超過回傳 1 */
 int check_fs_health(struct statvfs *stat, int warn_percent)
 {
+    if (stat->f_blocks == 0) return 0;
     unsigned long used = stat->f_blocks - stat->f_bfree;
     int percent = (int)(used * 100 / stat->f_blocks);
     return percent >= warn_percent ? 1 : 0;

@@ -1,18 +1,28 @@
-# Config.src - menuconfig 設定選項
+#
+# For a description of the syntax of this configuration file,
+# see docs/Kconfig-language.txt.
+#
+
+menu "Diagnostics Utilities"
+
 config BBTOP
-	bool "bbtop"
+	bool "bbtop (process resource analyzer)"
 	default y
 	help
-	  行程資源分析器
+	  行程資源分析器，顯示 PID、CPU%、Memory，支援 PID tree。
 
 config BBFSCHECK
-	bool "bbfscheck"
+	bool "bbfscheck (filesystem health checker)"
 	default y
 	help
-	  檔案系統健康檢測工具
+	  檔案系統健康檢測，顯示磁碟容量與 inode 使用率。
 
 config BBNETMON
-	bool "bbnetmon"
+	bool "bbnetmon (network connection monitor)"
 	default y
 	help
-	  TCP 連線狀態監控器
+	  TCP 連線監控，統計連線狀態與偵測異常。
+
+INSERT
+
+endmenu
