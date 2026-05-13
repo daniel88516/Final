@@ -38,3 +38,34 @@ git clone https://github.com/daniel88516/Final.git
 │  /proc/stat          readdir()                   │
 └─────────────────────────────────────────────────┘
 ```
+
+
+
+
+
+## 目前進度
+
+### 1. 加入 BusyBox source code
+
+直接從官方 clone BusyBox source code 放入 `busybox/` 資料夾：
+
+```
+git clone https://git.busybox.net/busybox busybox
+```
+
+### 2. 修改 `busybox/Makefile`
+
+在 `libs-y` 最後加入 `diagnostics/`，讓 build system 知道有這個資料夾：
+
+```
+libs-y += diagnostics/
+```
+
+### 3. 建立 `busybox/diagnostics/`
+
+新增以下檔案：
+
+- `bbtop.c`、`bbfscheck.c`、`bbnetmon.c` — 各工具的實作（含 `//applet:` 註冊）
+- `libdiag.c`、`libdiag.h` — 共用模組
+- `Kbuild.src` — 告訴 build system 要編譯哪些檔案
+- `Config.src` — menuconfig 設定選項
