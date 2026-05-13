@@ -1,0 +1,18 @@
+# Config.src - menuconfig 設定選項
+config BBTOP
+	bool "bbtop"
+	default y
+	help
+	  行程資源分析器
+
+config BBFSCHECK
+	bool "bbfscheck"
+	default y
+	help
+	  檔案系統健康檢測工具
+
+config BBNETMON
+	bool "bbnetmon"
+	default y
+	help
+	  TCP 連線狀態監控器
