@@ -1,0 +1,2 @@
+# Placeholder for a BusyBox configuration that enables the diagnostics applets.
+# Generate this from third_party/busybox after the applets are fully wired into Kconfig.

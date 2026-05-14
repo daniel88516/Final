@@ -1,96 +1,86 @@
-# mybox — BusyBox 系統診斷工具集
+# BusyBox Diagnostics Toolkit
 
-基於 BusyBox applet 架構的輕量化 Linux 系統監控與健康檢測工具。
+This repository contains a small Linux diagnostics toolkit intended to be integrated into BusyBox as custom applets.
 
-## 專案結構
+Planned applets:
 
-```
+- `bbfscheck`: filesystem usage and health summary
+- `bbtop`: process and resource summary
+- `bbnetmon`: TCP connection summary
+
+BusyBox is treated as an external dependency under `third_party/busybox`. Project-owned source lives under `src/`, and scripts copy that source into BusyBox when needed.
+
+## Repository Structure
+
+```text
 Final/
-├── main.c          # applet dispatcher
-├── mybox.h         # 共用標頭與函式宣告
-├── Makefile        # 編譯與測試
-├── bbtop.c         # 行程資源分析（組員 A）
-├── bbfscheck.c     # 檔案系統健康檢測（組員 B）
-├── bbnetmon.c      # TCP 連線監控（組員 C）
-├── testcases/      # 本專題功能測試腳本
-└── testcases_wc/   # 舊測資（HW1 wc 專用，不需理會）
+├── src/
+│   ├── applets/          # BusyBox applet entry points
+│   └── libdiag/          # shared diagnostics helpers
+├── busybox-meta/         # project-owned BusyBox Config/Kbuild snippets
+├── third_party/          # external dependencies; BusyBox submodule goes here
+├── scripts/              # integration, build, test, and benchmark commands
+├── tests/                # smoke, integration, fixtures, and golden files
+├── benchmarks/           # benchmark scripts and local results
+├── docs/                 # detailed project documentation
+└── configs/              # BusyBox config files
 ```
 
-## 環境需求
+## Initialize BusyBox
 
-需要在 Linux 環境下執行（WSL、Docker 或原生 Linux 均可），需安裝 `gcc` 與 `make`。
+Add BusyBox as a submodule if it is not already present:
 
-### 使用 BusyDocker 統一開發環境
-
-**建立並啟動容器**
-
-```bash
-cd C:\Users\danie\Desktop\Linuxwork\BusyDocker
-wsl sudo ./build.sh --run
-# 然後再輸入密碼
+```sh
+git submodule add https://github.com/mirror/busybox.git third_party/busybox
+git submodule update --init --recursive
 ```
 
-**進入容器**
+If the submodule already exists in the repository, initialize it with:
 
-```bash
-docker exec -it busydocker_inst bash
-cd /workspace/Final
+```sh
+make init-submodule
 ```
 
-## 編譯
+## Integrate Applets
 
-```bash
-make
+Copy project-owned diagnostics sources into the BusyBox tree:
+
+```sh
+make integrate
 ```
 
-## 執行方式
+This refreshes `third_party/busybox/diagnostics/` from `src/applets/`, `src/libdiag/`, and `busybox-meta/`.
 
-編譯後會產生 `mybox` 執行檔，並建立 symlink。
+## Build
 
-### 透過 symlink 執行
-
-```bash
-make install   # 建立 bbtop、bbfscheck、bbnetmon symlink
-./bbtop
-./bbfscheck
-./bbnetmon
+```sh
+make build
 ```
 
-### 直接透過 mybox 執行
+The build script enters `third_party/busybox/`, configures BusyBox, builds it, and prints the resulting binary path.
 
-```bash
-./mybox bbtop
-./mybox bbfscheck
-./mybox bbnetmon
+## Test
+
+```sh
+make test
 ```
 
-## 測試
+The current tests include Linux runtime smoke checks and placeholder integration tests for the planned applets.
 
-### 單一功能測試
+## Benchmarks
 
-```bash
-bash testcases/test_bbtop.sh
-bash testcases/test_bbfscheck.sh
-bash testcases/test_bbnetmon.sh
+```sh
+make bench
 ```
 
-### 全部測試
+Local benchmark output is written under `benchmarks/results/local-*`.
 
-```bash
-make test_all
-```
+## Documentation
 
-## 清除編譯產物
+See:
 
-```bash
-make clean
-```
-
-## 分工
-
-| 組員   | 負責項目                                |
-| ---- | ----------------------------------- |
-| 組員 A | `bbtop.c` — 行程資源分析                  |
-| 組員 B | `bbfscheck.c` — 檔案系統健康檢測            |
-| 組員 C | `bbnetmon.c` — TCP 連線監控             |
-| 組員 D | `main.c`、`mybox.h`、`Makefile`、測試、文件 |
+- `docs/architecture.md`
+- `docs/development-guide.md`
+- `docs/busybox-integration.md`
+- `docs/benchmark-plan.md`
+- `docs/demo-script.md`

@@ -1,28 +1,23 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
+BUSYBOX_DIR := third_party/busybox
 
-TARGET = mybox
-SRCS = main.c ls.c cp.c wc.c
-OBJS = $(SRCS:.c=.o)
-LINKS = ls cp wc
+.PHONY: init-submodule integrate build test bench clean
 
-.PHONY: all clean install test_all
+init-submodule:
+	git submodule update --init --recursive
 
-all: $(TARGET)
+integrate:
+	./scripts/integrate_busybox.sh
 
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^
+build:
+	./scripts/build_busybox.sh
 
-%.o: %.c mybox.h
-	$(CC) $(CFLAGS) -c -o $@ $<
+test:
+	./scripts/run_tests.sh
+
+bench:
+	./scripts/benchmark.sh
 
 clean:
-	rm -f $(TARGET) $(OBJS) $(LINKS)
-
-install: $(TARGET)
-	$(foreach link,$(LINKS),ln -sf $(TARGET) $(link) &&) true
-
-test_all: all
-	bash testcases/test_bbtop.sh
-	bash testcases/test_bbfscheck.sh
-	bash testcases/test_bbnetmon.sh
+	@if [ -d "$(BUSYBOX_DIR)" ]; then \
+		$(MAKE) -C "$(BUSYBOX_DIR)" clean; \
+	fi
