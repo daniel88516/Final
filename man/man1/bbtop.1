@@ -1,0 +1,77 @@
+.TH BBTOP 1 "2026-05-15" "BusyBox Diagnostics" "User Commands"
+
+.SH NAME
+bbtop \- 輕量化行程資源分析工具
+
+.SH SYNOPSIS
+.B bbtop
+[\fB\-\-snapshot\fR]
+[\fB\-\-interval\fR \fIN\fR]
+[\fB\-\-sort\fR \fIFIELD\fR]
+[\fB\-\-tree\fR]
+
+.SH DESCRIPTION
+.B bbtop
+讀取 \fI/proc/[pid]/stat\fR 與 \fI/proc/[pid]/status\fR，
+顯示系統中各行程的 PID、PPID、名稱、CPU 使用率與記憶體用量（RSS）。
+透過兩次 \fI/proc/stat\fR 採樣計算 CPU 使用率 delta。
+
+適合在嵌入式或最小化 Linux 環境中快速掌握行程資源狀態。
+
+.SH OPTIONS
+.TP
+.B \-\-snapshot
+單次輸出後結束，不進入循環刷新模式。
+.TP
+.BI \-\-interval " N"
+每隔 \fIN\fR 秒刷新一次輸出（預設：3）。
+.TP
+.BI \-\-sort " FIELD"
+依指定欄位排序，可選 \fBcpu\fR 或 \fBmem\fR（預設：\fBcpu\fR）。
+.TP
+.B \-\-tree
+以 PID tree 樹狀格式顯示行程階層關係。
+
+.SH OUTPUT
+輸出欄位說明：
+
+.TS
+l l.
+PID	行程 ID
+PPID	父行程 ID
+NAME	指令名稱
+CPU%	CPU 使用率（兩次採樣 delta）
+RSS(KB)	常駐記憶體用量（KB）
+.TE
+
+.SH EXAMPLES
+單次輸出所有行程：
+.RS
+.B bbtop --snapshot
+.RE
+
+每 5 秒刷新，依記憶體排序：
+.RS
+.B bbtop --interval 5 --sort mem
+.RE
+
+以樹狀顯示行程：
+.RS
+.B bbtop --tree
+.RE
+
+.SH DATA SOURCES
+.I /proc/[pid]/stat
+.br
+.I /proc/[pid]/status
+.br
+.I /proc/stat
+
+.SH SEE ALSO
+.BR top (1),
+.BR ps (1),
+.BR bbfscheck (1),
+.BR bbnetmon (1)
+
+.SH AUTHORS
+組員 A（行程資料解析）、組員 D（BusyBox 整合與文件）

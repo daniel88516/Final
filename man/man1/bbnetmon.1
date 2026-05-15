@@ -1,0 +1,77 @@
+.TH BBNETMON 1 "2026-05-15" "BusyBox Diagnostics" "User Commands"
+
+.SH NAME
+bbnetmon \- 輕量化 TCP 連線狀態監控工具
+
+.SH SYNOPSIS
+.B bbnetmon
+[\fB\-\-summary\fR]
+[\fB\-\-list\fR]
+[\fB\-\-state\fR \fISTATE\fR]
+
+.SH DESCRIPTION
+.B bbnetmon
+解析 \fI/proc/net/tcp\fR 與 \fI/proc/net/tcp6\fR 的十六進位欄位，
+列出 TCP 連線的 local/remote address、port 與狀態，
+或以 summary 模式依 state 統計連線數量。
+
+TIME_WAIT 或 CLOSE_WAIT 超過 100 條時自動標記 \fBWARN\fR。
+不進行 DNS 或 service name 反查，以降低輸出成本。
+
+.SH OPTIONS
+.TP
+.B \-\-summary
+依 TCP state 統計連線數，顯示各狀態數量與健康狀態。預設模式。
+.TP
+.B \-\-list
+列出所有連線的 local address:port、remote address:port 與 state。
+.TP
+.BI \-\-state " STATE"
+搭配 \fB\-\-list\fR，只顯示指定 state 的連線，
+例如 \fBESTABLISHED\fR、\fBLISTEN\fR、\fBTIME_WAIT\fR。
+
+.SH TCP STATES
+.TS
+l l.
+ESTABLISHED	已建立連線
+SYN_SENT	主動發起連線中
+SYN_RECV	收到 SYN 等待確認
+FIN_WAIT1	主動關閉第一階段
+FIN_WAIT2	主動關閉第二階段
+TIME_WAIT	等待重複封包消散
+CLOSE	連線已關閉
+CLOSE_WAIT	被動關閉等待應用層
+LAST_ACK	等待最後確認
+LISTEN	監聽中
+CLOSING	雙方同時關閉
+.TE
+
+.SH EXAMPLES
+顯示 TCP 狀態摘要：
+.RS
+.B bbnetmon --summary
+.RE
+
+列出所有連線：
+.RS
+.B bbnetmon --list
+.RE
+
+只顯示 ESTABLISHED 連線：
+.RS
+.B bbnetmon --list --state ESTABLISHED
+.RE
+
+.SH DATA SOURCES
+.I /proc/net/tcp
+.br
+.I /proc/net/tcp6
+
+.SH SEE ALSO
+.BR ss (8),
+.BR netstat (8),
+.BR bbtop (1),
+.BR bbfscheck (1)
+
+.SH AUTHORS
+組員 C（TCP state 解析與異常規則）、組員 D（BusyBox 整合與文件）

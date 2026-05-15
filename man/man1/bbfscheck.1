@@ -1,0 +1,85 @@
+.TH BBFSCHECK 1 "2026-05-15" "BusyBox Diagnostics" "User Commands"
+
+.SH NAME
+bbfscheck \- 輕量化檔案系統健康檢測工具
+
+.SH SYNOPSIS
+.B bbfscheck
+[\fB\-\-summary\fR]
+[\fB\-\-inode\fR]
+[\fB\-\-scan\fR \fIDIR\fR]
+[\fB\-\-max\-depth\fR \fIN\fR]
+[\fB\-\-warn\fR \fIPERCENT\fR]
+
+.SH DESCRIPTION
+.B bbfscheck
+讀取 \fI/proc/mounts\fR 並以 \fBstatvfs\fR(2) 查詢各掛載點的容量與 inode 使用狀況，
+同時支援以 \fBopendir\fR/\fBreaddir\fR/\fBlstat\fR 遞迴掃描指定目錄，
+統計檔案數量與總大小。使用率超過門檻時標記 \fBWARN\fR。
+
+自動略過 proc、sysfs、devtmpfs、tmpfs 等虛擬檔案系統。
+
+.SH OPTIONS
+.TP
+.B \-\-summary
+顯示所有真實掛載點的容量摘要（SIZE、USED、AVAIL、USE%）。預設模式。
+.TP
+.B \-\-inode
+顯示 inode 使用率。
+.TP
+.BI \-\-scan " DIR"
+遞迴掃描 \fIDIR\fR，統計檔案數量與總大小。
+.TP
+.BI \-\-max\-depth " N"
+搭配 \fB\-\-scan\fR 使用，限制遞迴深度（預設：無限制）。
+.TP
+.BI \-\-warn " PERCENT"
+使用率超過 \fIPERCENT\fR % 時標記 WARN（預設：80）。
+
+.SH OUTPUT
+.B \-\-summary
+輸出欄位：
+
+.TS
+l l.
+FILESYSTEM	裝置名稱
+SIZE(MB)	總容量
+USED(MB)	已使用
+AVAIL(MB)	可用空間
+USE%	使用率
+MOUNT	掛載點
+STATUS	OK / WARN
+.TE
+
+.SH EXAMPLES
+顯示所有掛載點摘要：
+.RS
+.B bbfscheck --summary
+.RE
+
+掃描 /home 目錄（深度 3）：
+.RS
+.B bbfscheck --scan /home --max-depth 3
+.RE
+
+使用率超過 90% 才警告：
+.RS
+.B bbfscheck --summary --warn 90
+.RE
+
+.SH DATA SOURCES
+.I /proc/mounts
+.br
+.BR statvfs (2),
+.BR opendir (3),
+.BR readdir (3),
+.BR lstat (2)
+
+.SH SEE ALSO
+.BR df (1),
+.BR du (1),
+.BR bbtop (1),
+.BR bbnetmon (1)
+
+.SH AUTHORS
+組員 B（statvfs 與目錄掃描）、組員 D（BusyBox 整合與文件）
