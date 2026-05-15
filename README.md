@@ -114,6 +114,38 @@ make bench            # 跑 benchmark
   - `tests/integration/`：各 applet 功能測試
   - `scripts/integrate_busybox.sh`：自動整合腳本
 
+- [x] **BusyBox 編譯驗證**（2026-05-15，在 Docker 環境內完成）
+
+  整合過程中遇到並修正了以下問題：
+  1. `make defconfig` 是互動式 → 改用 `yes '' | make defconfig` 自動接受預設值
+  2. `diagnostics/Config.in` 未被 BusyBox 頂層 `Config.in` 包含 → `integrate_busybox.sh` 自動補上 `source diagnostics/Config.in`
+  3. `diagnostics/` 未被 BusyBox `Makefile` 的 `libs-y` 包含 → `integrate_busybox.sh` 自動補上
+  4. `CONFIG_BBTOP/BBFSCHECK/BBNETMON` 未在 `.config` 啟用 → 用 `sed` 直接修改 `.config` 啟用
+  5. applet include 路徑錯誤（`libdiag/fs_reader.h`）→ 整合後所有檔案同層，改為 `fs_reader.h`
+
+  **編譯結果（binary 大小：1.1 MB）：**
+
+  ```
+  $ busybox bbfscheck
+  FILESYSTEM     SIZE(MB)  USED(MB)  AVAIL(MB)  USE%  MOUNT       STATUS
+  -----------------------------------------------------------------------
+  overlay        1031018   8654      969919     0%    /           OK
+  C:\            464153    161416    302736     34%   /workspace  OK
+
+  $ busybox bbtop
+  System CPU usage: 0%
+  PID    PPID   NAME     CPU%  RSS(KB)
+  ------------------------------------
+  1      0      sshd     -     8704
+  24975  0      bash     -     2944
+
+  $ busybox bbnetmon
+  Total TCP connections (IPv4+IPv6): 2
+  STATE   COUNT  STATUS
+  ----------------------
+  LISTEN  2      OK
+  ```
+
 - [x] **文件**（2026-05-15）
   
   - `CONTRIBUTING.md`：環境需求、建置流程、測試、分支規範
@@ -121,25 +153,30 @@ make bench            # 跑 benchmark
   - `man/man1/bbfscheck.1`：bbfscheck man page
   - `man/man1/bbnetmon.1`：bbnetmon man page
 
-### 待完成
+### 待完成 (參考)
 
 #### 組員 A
+
 - [ ] `bbtop` 核心功能：CPU% 計算（兩次 `/proc/stat` 採樣 delta）、依 CPU/Memory 排序、PID tree 顯示
 - [ ] `bbtop` CLI 選項：`--snapshot`、`--interval N`、`--sort FIELD`、`--tree`
 
 #### 組員 B
+
 - [ ] `bbfscheck` 核心功能：inode 使用率顯示、`--scan DIR` 目錄掃描模式
 - [ ] `bbfscheck` CLI 選項：`--summary`、`--inode`、`--scan DIR`、`--max-depth N`、`--warn PERCENT`
 
 #### 組員 C
+
 - [ ] `bbnetmon` 核心功能：`--list` 列出所有連線的 local/remote address:port、state 篩選
 - [ ] `bbnetmon` CLI 選項：`--summary`、`--list`、`--state STATE`
 
 #### 組員 D
-- [ ] 在 Docker 環境內執行 `make integrate && make build` 驗證編譯（等 A/B/C 核心功能完成後整合）
+
+- [x] ~~在 Docker 環境內執行 `make integrate && make build` 驗證編譯~~ **完成**
 - [ ] `tests/integration/` 補充實際驗證邏輯（等各 applet 功能穩定後補上）
 - [ ] Benchmark：與 `top`/`df`/`du`/`ss` 比較時間與記憶體用量（等編譯通過後執行）
 - [ ] man page OPTIONS 欄位補齊（等 A/B/C CLI 選項確定後更新）
 
 #### 全組
+
 - [ ] 書面報告與簡報（5/24–5/26）
