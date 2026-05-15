@@ -123,9 +123,23 @@ make bench            # 跑 benchmark
 
 ### 待完成
 
-- [ ] 在 Docker 環境內執行 `make integrate && make build` 驗證編譯
-- [ ] 補充 `bbtop` CPU% 欄位（目前顯示 `-`，需兩次採樣計算 per-process CPU）
-- [ ] `tests/integration/` 測試腳本補充實際驗證邏輯
-- [ ] CLI 選項（`--snapshot`、`--interval`、`--summary` 等）等 A/B/C 核心功能完成後補上
-- [ ] Benchmark（與 top/df/du/ss 比較，等編譯通過後執行）
-- [ ] 書面報告與簡報
+#### 組員 A
+- [ ] `bbtop` 核心功能：CPU% 計算（兩次 `/proc/stat` 採樣 delta）、依 CPU/Memory 排序、PID tree 顯示
+- [ ] `bbtop` CLI 選項：`--snapshot`、`--interval N`、`--sort FIELD`、`--tree`
+
+#### 組員 B
+- [ ] `bbfscheck` 核心功能：inode 使用率顯示、`--scan DIR` 目錄掃描模式
+- [ ] `bbfscheck` CLI 選項：`--summary`、`--inode`、`--scan DIR`、`--max-depth N`、`--warn PERCENT`
+
+#### 組員 C
+- [ ] `bbnetmon` 核心功能：`--list` 列出所有連線的 local/remote address:port、state 篩選
+- [ ] `bbnetmon` CLI 選項：`--summary`、`--list`、`--state STATE`
+
+#### 組員 D
+- [ ] 在 Docker 環境內執行 `make integrate && make build` 驗證編譯（等 A/B/C 核心功能完成後整合）
+- [ ] `tests/integration/` 補充實際驗證邏輯（等各 applet 功能穩定後補上）
+- [ ] Benchmark：與 `top`/`df`/`du`/`ss` 比較時間與記憶體用量（等編譯通過後執行）
+- [ ] man page OPTIONS 欄位補齊（等 A/B/C CLI 選項確定後更新）
+
+#### 全組
+- [ ] 書面報告與簡報（5/24–5/26）
