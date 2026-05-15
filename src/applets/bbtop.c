@@ -1,7 +1,10 @@
 //applet:IF_BBTOP(APPLET(bbtop, BB_DIR_USR_BIN, BB_SUID_DROP))
 //kbuild:lib-$(CONFIG_BBTOP) += bbtop.o proc_reader.o formatter.o
 
-#include "libdiag/proc_reader.h"
+//usage:#define bbtop_trivial_usage ""
+//usage:#define bbtop_full_usage "\n\nDisplay process resource summary (PID, PPID, NAME, CPU%, RSS)"
+
+#include "proc_reader.h"
 
 #ifndef MAIN_EXTERNALLY_VISIBLE
 #define MAIN_EXTERNALLY_VISIBLE

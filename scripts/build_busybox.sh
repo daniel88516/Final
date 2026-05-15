@@ -14,10 +14,16 @@ cd "$BUSYBOX_DIR"
 
 if [ -f "$ROOT_DIR/configs/busybox_diag_defconfig" ]; then
 	cp "$ROOT_DIR/configs/busybox_diag_defconfig" .config
-	make olddefconfig
+	yes "" | make oldconfig
 else
-	make defconfig
+	yes "" | make defconfig
 fi
+
+# Enable our diagnostics applets
+echo "CONFIG_BBTOP=y"     >> .config
+echo "CONFIG_BBFSCHECK=y" >> .config
+echo "CONFIG_BBNETMON=y"  >> .config
+yes "" | make oldconfig
 
 make
 

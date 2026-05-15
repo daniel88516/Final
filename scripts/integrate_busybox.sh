@@ -19,4 +19,18 @@ cp "$ROOT_DIR"/src/libdiag/*.[ch]   "$DIAG_DIR"/
 cp "$ROOT_DIR"/busybox-meta/Config.src "$DIAG_DIR"/Config.src
 cp "$ROOT_DIR"/busybox-meta/Kbuild.src "$DIAG_DIR"/Kbuild.src
 
-echo "Done. Wire diagnostics/Config.src into BusyBox configuration if not already included."
+# Register diagnostics/Config.in in top-level Config.in if not already there
+TOP_CONFIG="$BUSYBOX_DIR/Config.in"
+if ! grep -q 'source diagnostics/Config.in' "$TOP_CONFIG"; then
+	echo 'source diagnostics/Config.in' >> "$TOP_CONFIG"
+	echo "Registered diagnostics/Config.in in $TOP_CONFIG"
+fi
+
+# Register diagnostics/ in BusyBox Makefile libs-y if not already there
+TOP_MAKEFILE="$BUSYBOX_DIR/Makefile"
+if ! grep -q 'diagnostics/' "$TOP_MAKEFILE"; then
+	sed -i 's|util-linux/volume_id/ \\|util-linux/volume_id/ \\\n\t\tdiagnostics/ \\|' "$TOP_MAKEFILE"
+	echo "Registered diagnostics/ in $TOP_MAKEFILE"
+fi
+
+echo "Done."

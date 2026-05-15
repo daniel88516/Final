@@ -1,7 +1,10 @@
 //applet:IF_BBFSCHECK(APPLET(bbfscheck, BB_DIR_USR_BIN, BB_SUID_DROP))
 //kbuild:lib-$(CONFIG_BBFSCHECK) += bbfscheck.o fs_reader.o formatter.o
 
-#include "libdiag/fs_reader.h"
+//usage:#define bbfscheck_trivial_usage ""
+//usage:#define bbfscheck_full_usage "\n\nDisplay filesystem usage and health summary (SIZE, USED, AVAIL, USE%, STATUS)"
+
+#include "fs_reader.h"
 
 #ifndef MAIN_EXTERNALLY_VISIBLE
 #define MAIN_EXTERNALLY_VISIBLE
