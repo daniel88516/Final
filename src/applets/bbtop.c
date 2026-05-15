@@ -1,0 +1,16 @@
+//applet:IF_BBTOP(APPLET(bbtop, BB_DIR_USR_BIN, BB_SUID_DROP))
+//kbuild:lib-$(CONFIG_BBTOP) += bbtop.o proc_reader.o formatter.o
+
+#include "libdiag/proc_reader.h"
+
+#ifndef MAIN_EXTERNALLY_VISIBLE
+#define MAIN_EXTERNALLY_VISIBLE
+#endif
+
+int bbtop_main(int argc, char **argv) MAIN_EXTERNALLY_VISIBLE;
+int bbtop_main(int argc, char **argv)
+{
+    (void)argc;
+    (void)argv;
+    return diag_print_process_summary();
+}

@@ -1,0 +1,5 @@
+# Diagnostics applets copied into third_party/busybox/diagnostics by scripts/integrate_busybox.sh.
+
+lib-$(CONFIG_BBFSCHECK) += bbfscheck.o fs_reader.o formatter.o
+lib-$(CONFIG_BBTOP)     += bbtop.o proc_reader.o formatter.o
+lib-$(CONFIG_BBNETMON)  += bbnetmon.o net_reader.o formatter.o

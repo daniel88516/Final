@@ -1,23 +1,37 @@
-# Compiled executables
+# Build outputs
+*.o
+*.a
+*.so
+*.d
+*.cmd
+*.su
+*.dSYM/
+build/
+out/
+dist/
+
+# Old executables
 mybox
 cp
 ls
 wc
 
-# Object files
-*.o
+# BusyBox generated files
+third_party/busybox/.config
+third_party/busybox/.config.old
+third_party/busybox/busybox
+third_party/busybox/applets/applet_tables
+third_party/busybox/include/applet_tables.h
+third_party/busybox/include/usage_compressed.h
 
-# Debug files
-*.dSYM/
-*.su
+# Local benchmark results
+benchmarks/results/local-*/
 
-# IDE/Editor
+# Editor / OS files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-
-# OS files
 .DS_Store
 Thumbs.db

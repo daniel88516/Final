@@ -1,0 +1,21 @@
+menu "Diagnostics applets"
+
+config BBFSCHECK
+	bool "bbfscheck"
+	default n
+	help
+	  Print a compact filesystem usage and health summary.
+
+config BBTOP
+	bool "bbtop"
+	default n
+	help
+	  Print a compact process and CPU resource summary.
+
+config BBNETMON
+	bool "bbnetmon"
+	default n
+	help
+	  Print a compact TCP connection summary.
+
+endmenu

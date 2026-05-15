@@ -1,5 +1,0 @@
-# Kbuild.src - 告訴 build system 要編譯哪些檔案
-lib-$(CONFIG_BBTOP)     += bbtop.o
-lib-$(CONFIG_BBFSCHECK) += bbfscheck.o
-lib-$(CONFIG_BBNETMON)  += bbnetmon.o
-lib-y                   += libdiag.o
